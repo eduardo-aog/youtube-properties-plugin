@@ -1,7 +1,9 @@
-import {App, Modal, Notice, Plugin, Setting, TextComponent} from 'obsidian';
-import {DEFAULT_SETTINGS, MyPluginSettings, SampleSettingTab} from "./settings";
+import { Notice, Plugin, normalizePath, TFolder } from 'obsidian';
+import { DEFAULT_SETTINGS, YoutubePropertiesSettings, 
+	YoutubePropertiesSettingTab } from "./settings";
 import { VideoMetadata } from 'types/metadata';
 import { getYoutubeId } from './utils/helpers';
+import { YoutubePropertiesModal } from './views/modals';
 import play from 'play-dl';
 
 export class VideoInfo {
@@ -42,17 +44,17 @@ export class VideoInfo {
 }
 
 export default class Main extends Plugin {
-	settings: MyPluginSettings;
+	settings: YoutubePropertiesSettings;
 
 	async onload() {
 		await this.loadSettings();
 		// This creates an icon in the left ribbon.
 		this.addRibbonIcon('video', 'Video properties', async (evt: MouseEvent) => {
 			// Called when the user clicks the icon.
-			new YoutubeModal(this.app, this).open();
+			new YoutubePropertiesModal(this.app, this).open();
 		});
 		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new SampleSettingTab(this.app, this));
+		this.addSettingTab(new YoutubePropertiesSettingTab(this.app, this));
 	}
 
 	onunload() {
@@ -60,14 +62,27 @@ export default class Main extends Plugin {
 	async createNote(metadata: VideoMetadata) {
         const safeTitle = metadata.title.replace(/[\\/:*?"<>|]/g, '-');
         const fileName = `${safeTitle}.md`;
+		const folderPath = this.settings.folder || '';
+		const fullPath = normalizePath(`${folderPath}/${fileName}`);
         
+		if (folderPath !== "") {
+        const folder = this.app.vault.getAbstractFileByPath(folderPath);
+        
+        if (!folder) {
+            await this.app.vault.createFolder(folderPath);
+            new Notice(`Folder "${folderPath}" does not exists. Folder created at specified path.`);
+        } else if (!(folder instanceof TFolder)) {
+            new Notice(`Error: "${folderPath}" exists but is not a folder.`);
+            return;
+        }
+    }
         const fileContent = 
-		`---\ntitle: "${metadata.title}"\nlength: "${metadata.length}"\nauthor: "${metadata.author}"\nchannelUrl: "${metadata.channelUrl || ''}"\nuploadDate: "${metadata.uploadDate}"\nthumbnail: "${metadata.thumbnail}"\nvideoUrl: "${metadata.videoUrl}"\n---`
+		`---\ntitle: "${metadata.title}"\nlength: "${metadata.length}"\nauthor: "${metadata.author}"\nchannelUrl: "${metadata.channelUrl || ''}"\nuploadDate: "${metadata.uploadDate}"\nthumbnail: "${metadata.thumbnail}"\nvideoUrl: "${metadata.videoUrl}"\n---\n`;
 		try {
-            const newFile = await this.app.vault.create(fileName, fileContent);
+            const newFile = await this.app.vault.create(fullPath, fileContent);
             
             this.app.workspace.getLeaf(false).openFile(newFile);
-            new Notice(`Note created: ${safeTitle}`);
+            new Notice(`Note created at: ${folderPath || "Root folder"}`);
 
         } catch (error) {
             new Notice(`Error: A note named "${safeTitle}" already exists.`);
@@ -75,7 +90,7 @@ export default class Main extends Plugin {
     }
 
 	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData() as Partial<MyPluginSettings>);
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData() as Partial<YoutubePropertiesSettings>);
 	}
 
 	async saveSettings() {
@@ -84,57 +99,3 @@ export default class Main extends Plugin {
 }
 
 
-class YoutubeModal extends Modal {
-    plugin: Main;
-    urlInput: string = '';
-
-    constructor(app: App, plugin: Main) {
-        super(app);
-        this.plugin = plugin;
-    }
-
-    onOpen() {
-        const { contentEl } = this;
-        contentEl.createEl('h2', { text: 'Create Note from YouTube URL' });
-
-        // Usamos la clase Setting de Obsidian para una UI nativa y limpia
-        new Setting(contentEl)
-            .setName('Video URL')
-            .setDesc('Paste the YouTube video URL here.')
-			.addText((text: TextComponent) => {
-				text.setPlaceholder('https://www.youtube.com/watch?v=example')
-				.onChange((value) => {
-					this.urlInput = value;
-				});
-			})
-		
-		new Setting(contentEl)
-			.addButton((btn) => btn
-				.setButtonText('Create note')
-				.setCta()
-				.onClick(async () => {
-					if (!this.urlInput) {
-						new Notice('Please enter a YouTube URL.');
-						return;
-					}
-					
-					btn.setButtonText('Creating...').setDisabled(true);	
-
-					try {
-						const videoInfo = new VideoInfo();
-						videoInfo.setVideoUrl = this.urlInput;
-						const metadata = await videoInfo.fetchVideoInfo();
-						await this.plugin.createNote(metadata);
-						this.close();
-					} catch (error) {
-						new Notice('Error fetching video information. Please check the URL and try again.');
-						btn.setButtonText('Create note').setDisabled(false);
-					}
-				}));
-	}
-
-    onClose() {
-        const { contentEl } = this;
-        contentEl.empty();
-    }
-}

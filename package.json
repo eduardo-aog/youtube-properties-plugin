@@ -1,7 +1,7 @@
 {
-	"name": "obsidian-sample-plugin",
+	"name": "obsidian-youtube-properties-plugin",
 	"version": "1.0.0",
-	"description": "This is a sample plugin for Obsidian (https://obsidian.md)",
+	"description": "Obsidian plugin that automatically creates notes with metadata of a youtube video as its properties.",
 	"main": "main.js",
 	"type": "module",
 	"scripts": {

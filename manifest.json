@@ -1,11 +1,10 @@
 {
-	"id": "sample-plugin",
-	"name": "Sample Plugin",
+	"id": "obsidian-youtube-properties-plugin",
+	"name": "YouTube Properties",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"description": "Obsidian plugin that automatically creates notes with metadata of a youtube video as its properties.",
+	"author": "Eduardo Orozco",
+	"authorUrl": "https://github.com/eduardo-aog",
 	"isDesktopOnly": false
 }

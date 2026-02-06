@@ -1,36 +1,41 @@
 import {App, PluginSettingTab, Setting} from "obsidian";
 import MyPlugin from "./main";
+import { FolderSuggest } from "suggests/suggester";
 
-export interface MyPluginSettings {
-	mySetting: string;
+export interface YoutubePropertiesSettings {
+	folder: string;
 }
 
-export const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: ''
+export const DEFAULT_SETTINGS: YoutubePropertiesSettings = {
+	folder: ''
 }
 
-export class SampleSettingTab extends PluginSettingTab {
+export class YoutubePropertiesSettingTab extends PluginSettingTab { // Class
 	plugin: MyPlugin;
 
 	constructor(app: App, plugin: MyPlugin) {
 		super(app, plugin);
 		this.plugin = plugin;
-	}
+	} // Constructor
 
-	display(): void {
+	display(): void { // Method
 		const {containerEl} = this;
 
 		containerEl.empty();
-		
+
 		new Setting(containerEl)
-			.setName('Note Path')
-			.setDesc('Path where the note will be saved.')
-			.addText(text => text
-				.setPlaceholder('Enter note path')
-				.setValue(this.plugin.settings.mySetting)
-				.onChange(async (value) => {
-					this.plugin.settings.mySetting = value;
-					await this.plugin.saveSettings();
-				}));
-			} 
+      		.setName('Note location')
+      		.setDesc('New video notes will be created here')
+      		.addText(text => text 
+                .setPlaceholder('folder1/folder2')
+                .setValue(this.plugin.settings.folder)
+                .onChange(async (value) => {
+                    this.plugin.settings.folder = value.replace(/\/$/, ""); 
+                    await this.plugin.saveSettings();
+                })
+            );
+			new FolderSuggest(this.app, containerEl.querySelector('input') as HTMLInputElement); // Attach the folder suggester to the input
+
+    }
 }
+
