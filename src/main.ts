@@ -20,10 +20,18 @@ export class VideoInfo {
 
 	async fetchVideoInfo(): Promise<VideoMetadata> {
 		try {
-			const videoInfo = await play.video_info(this._videoUrl);
+			await play.setToken({
+            useragent: [
+                // Token for the Sign In issue (check)
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'
+            ]
+        });	
+
+			// Changed from 'video_info' to 'video_basic_info' to avoid fetching issues
+			const videoInfo = await play.video_basic_info(this._videoUrl);
 			const videoDetails = videoInfo.video_details;
 			const videoID = getYoutubeId(this._videoUrl);
-			const thumbnails = `https://img.youtube.com/vi/${videoID}/hqdefault.jpg`;
+			const thumbnails = `https://img.youtube.com/vi/${videoID}/maxresdefault.jpg`;
 
 			const metadata: VideoMetadata = {
 				title: videoDetails.title || "Untitled",
@@ -98,5 +106,3 @@ export default class Main extends Plugin {
 		await this.saveData(this.settings);
 	}
 }
-
-

@@ -28,22 +28,20 @@ length: "10:23"
 author: "Channel Name"
 channelUrl: "https://www.youtube.com/channel/xxxxx"
 uploadDate: "2024-10-01"
-thumbnail: "https://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg"
+thumbnail: "https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg"
 videoUrl: "https://www.youtube.com/watch?v=VIDEO_ID"
 ---
 ```
 
-## Template variable definitions
+## Template definitions
 
-- `title` — Video title (string)
-- `length` — Human-friendly duration (string)
-- `author` — Channel or author name (string)
-- `channelUrl` — Channel URL (string, optional)
-- `uploadDate` — Upload date reported by the source (string)
-- `thumbnail` — Direct URL to the video's thumbnail image (string)
-- `videoUrl` — Original YouTube video URL (string)
-
-These map to the plugin's `VideoMetadata` interface.
+- `title` — Video title
+- `length` — Human-friendly duration
+- `author` — Channel or author name
+- `channelUrl` — Channel URL
+- `uploadDate` — Upload date reported by the source
+- `thumbnail` — Direct URL to the video's thumbnail image 
+- `videoUrl` — Original YouTube video URL
 
 ## License
 
