@@ -13,12 +13,12 @@ export class YoutubePropertiesModal extends Modal {
 
     onOpen() {
         const { contentEl } = this;
-        contentEl.createEl('h2', { text: 'Create note from youtube url' });
+        contentEl.createEl('h2', { text: 'Create note from YouTube URL' });
 
         // 'new Setting' for UI 
         new Setting(contentEl)
-            .setName('Video url')
-            .setDesc('Paste the youtube video url here.')
+            .setName('Video URL')
+            .setDesc('Paste the YouTube video URL here.')
 			.addText((text: TextComponent) => {
 				text.setPlaceholder('https://www.youtube.com/watch?v=example')
 				.onChange((value) => {
@@ -32,7 +32,7 @@ export class YoutubePropertiesModal extends Modal {
 				.setCta()
 				.onClick(async () => {
 					if (!this.urlInput) {
-						new Notice('Please enter a youTube URL.');
+						new Notice('Please enter a YouTube URL.');
 						return;
 					}
 					
@@ -46,6 +46,7 @@ export class YoutubePropertiesModal extends Modal {
 						this.close();
 					} catch (error) {
 						new Notice('Error fetching video information. Please check the URL and try again.');
+						console.error(error);
 						btn.setButtonText('Create note').setDisabled(false);
 					}
 				}));

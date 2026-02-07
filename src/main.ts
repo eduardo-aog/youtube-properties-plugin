@@ -23,7 +23,7 @@ export class VideoInfo {
 			const videoInfo = await play.video_info(this._videoUrl);
 			const videoDetails = videoInfo.video_details;
 			const videoID = getYoutubeId(this._videoUrl);
-			const thumbnails = `https://img.youtube.com/vi/${videoID}/hqdefault.jpg` || `https://img.youtube.com/vi/${videoID}/mqdefault.jpg`;
+			const thumbnails = `https://img.youtube.com/vi/${videoID}/hqdefault.jpg`;
 
 			const metadata: VideoMetadata = {
 				title: videoDetails.title || "Untitled",

@@ -27,7 +27,7 @@ export class YoutubePropertiesSettingTab extends PluginSettingTab { // Class
       		.setName('Note location')
       		.setDesc('New video notes will be created here')
       		.addText(text => text 
-                .setPlaceholder('folder1/folder2')
+                .setPlaceholder('Folder1/folder2')
                 .setValue(this.plugin.settings.folder)
                 .onChange(async (value) => {
                     this.plugin.settings.folder = value.replace(/\/$/, ""); 
