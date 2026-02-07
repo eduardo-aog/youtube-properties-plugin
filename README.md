@@ -1,90 +1,59 @@
-# Obsidian Sample Plugin
+# YouTube Properties
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+## Description
 
-This project uses TypeScript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in TypeScript Definition format, which contains TSDoc comments describing what it does.
-
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open modal (simple)" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
-
-## First time developing plugins?
-
-Quick starting guide for new plugin devs:
-
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
-
-## Releasing new releases
-
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
-
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
-
-## Adding your plugin to the community plugin list
-
-- Check the [plugin guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines).
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
+This plugin automatically creates an Obsidian note containing metadata of a YouTube video. It fetches title, length, author, channel URL, upload date, thumbnail URL and the video URL.
 
 ## How to use
 
-- Clone this repo.
-- Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
+1. Click the ribbon icon (the one with the camera in it)
 
-## Manually installing the plugin
+2. Paste video's URL 
 
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
+3. Your new note will be created
 
-## Improve code quality with eslint
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code. 
-- This project already has eslint preconfigured, you can invoke a check by running`npm run lint`
-- Together with a custom eslint [plugin](https://github.com/obsidianmd/eslint-plugin) for Obsidan specific code guidelines.
-- A GitHub action is preconfigured to automatically lint every commit on all branches.
 
-## Funding URL
+## How to use settings
 
-You can include funding URLs where people who use your plugin can financially support it.
+### New file location
 
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
+Set the folder location where your file will be created. Otherwise, files are created in your vault root folder.
 
-```json
-{
-    "fundingUrl": "https://buymeacoffee.com"
-}
+## Example template
+
+```
+---
+title: "Video Title"
+length: "10:23"
+author: "Channel Name"
+channelUrl: "https://www.youtube.com/channel/xxxxx"
+uploadDate: "2024-10-01"
+thumbnail: "https://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg"
+videoUrl: "https://www.youtube.com/watch?v=VIDEO_ID"
+---
 ```
 
-If you have multiple URLs, you can also do:
+## Template variable definitions
 
-```json
-{
-    "fundingUrl": {
-        "Buy Me a Coffee": "https://buymeacoffee.com",
-        "GitHub Sponsor": "https://github.com/sponsors",
-        "Patreon": "https://www.patreon.com/"
-    }
-}
-```
+- `title` — Video title (string)
+- `length` — Human-friendly duration (string)
+- `author` — Channel or author name (string)
+- `channelUrl` — Channel URL (string, optional)
+- `uploadDate` — Upload date reported by the source (string)
+- `thumbnail` — Direct URL to the video's thumbnail image (string)
+- `videoUrl` — Original YouTube video URL (string)
 
-## API Documentation
+These map to the plugin's `VideoMetadata` interface.
 
-See https://docs.obsidian.md
+## License
+
+This project includes a LICENSE file. See [LICENSE](LICENSE) for license terms.
+
+## Contributing
+
+Feel free to contribute.
+
+You can create an issue to report a bug, ask a question, etc.
+This is a very simple plugin due to i'm new at TypeScript and Obsidian plugins development. Any recommendation or suggestion of improvement for this plugin would be really appreciated. 
+
+You can make a pull request to contribute to this plugin development.

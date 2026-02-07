@@ -2,7 +2,7 @@ import { Notice, Plugin, normalizePath, TFolder } from 'obsidian';
 import { DEFAULT_SETTINGS, YoutubePropertiesSettings, 
 	YoutubePropertiesSettingTab } from "./settings";
 import { VideoMetadata } from 'types/metadata';
-import { getYoutubeId } from './utils/helpers';
+import { getYoutubeId, formatDate } from './utils/helpers';
 import { YoutubePropertiesModal } from './views/modals';
 import play from 'play-dl';
 
@@ -30,7 +30,7 @@ export class VideoInfo {
 				length: videoDetails.durationRaw,
 				author: videoDetails.channel?.name || "Unknown",
 				channelUrl: videoDetails.channel?.url || '',
-				uploadDate: videoDetails.uploadedAt || '',
+				uploadDate: formatDate(videoDetails.uploadedAt),
 				thumbnail: thumbnails,		
 				videoUrl: this.getVideoUrl				
 			}
