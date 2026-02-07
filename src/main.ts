@@ -57,7 +57,7 @@ export default class Main extends Plugin {
 	async onload() {
 		await this.loadSettings();
 		// This creates an icon in the left ribbon.
-		this.addRibbonIcon('video', 'Video properties', async (evt: MouseEvent) => {
+		this.addRibbonIcon('video', 'Video properties', () => {
 			// Called when the user clicks the icon.
 			new YoutubePropertiesModal(this.app, this).open();
 		});
