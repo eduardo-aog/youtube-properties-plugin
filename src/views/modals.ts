@@ -13,12 +13,12 @@ export class YoutubePropertiesModal extends Modal {
 
     onOpen() {
         const { contentEl } = this;
-        contentEl.createEl('h2', { text: 'Create Note from YouTube URL' });
+        contentEl.createEl('h2', { text: 'Create note from youtube url' });
 
         // 'new Setting' for UI 
         new Setting(contentEl)
-            .setName('Video URL')
-            .setDesc('Paste the YouTube video URL here.')
+            .setName('Video url')
+            .setDesc('Paste the youtube video url here.')
 			.addText((text: TextComponent) => {
 				text.setPlaceholder('https://www.youtube.com/watch?v=example')
 				.onChange((value) => {
@@ -32,7 +32,7 @@ export class YoutubePropertiesModal extends Modal {
 				.setCta()
 				.onClick(async () => {
 					if (!this.urlInput) {
-						new Notice('Please enter a YouTube URL.');
+						new Notice('Please enter a youTube URL.');
 						return;
 					}
 					

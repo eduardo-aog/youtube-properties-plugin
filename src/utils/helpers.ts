@@ -11,8 +11,9 @@ export function formatDate(dateStr: string | undefined): string {
     if (isNaN(date.getTime())) return dateStr;
     
     try {
-        return date.toISOString().split('T')[0] || '';
+        return date.toISOString().substring(0, 10); // Formato YYYY-MM-DD
     } catch (e) {
         return dateStr;
+        console.error("Error formatting date:", e);
     }
 }

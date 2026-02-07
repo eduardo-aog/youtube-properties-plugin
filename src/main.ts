@@ -22,7 +22,7 @@ export class VideoInfo {
 		try {
 			const videoInfo = await play.video_info(this._videoUrl);
 			const videoDetails = videoInfo.video_details;
-			const videoID = getYoutubeId(this._videoUrl) || '';
+			const videoID = getYoutubeId(this._videoUrl);
 			const thumbnails = `https://img.youtube.com/vi/${videoID}/hqdefault.jpg` || `https://img.youtube.com/vi/${videoID}/mqdefault.jpg`;
 
 			const metadata: VideoMetadata = {
@@ -81,11 +81,12 @@ export default class Main extends Plugin {
 		try {
             const newFile = await this.app.vault.create(fullPath, fileContent);
             
-            this.app.workspace.getLeaf(false).openFile(newFile);
+            await this.app.workspace.getLeaf(false).openFile(newFile);
             new Notice(`Note created at: ${folderPath || "Root folder"}`);
 
-        } catch (error) {
+        } catch (e) {
             new Notice(`Error: A note named "${safeTitle}" already exists.`);
+			console.error(e);
         }
     }
 
